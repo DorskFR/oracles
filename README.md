@@ -9,6 +9,10 @@ Each oracle is an **isolated, importable unit** *and* a CLI. Pure oracles never
 drive a browser; capturing is the core's job, so the oracles are trivially
 unit-tested. Drop the package into any project via `file:../oracles`.
 
+## Output report
+
+<img width="1384" height="1027" alt="Screenshot 2026-06-26 at 8 45 49" src="https://github.com/user-attachments/assets/c16ec229-e269-4fee-8965-8a4935ff43d4" />
+
 ## The model
 
 One pinned **render contract** captures three artifacts from every target:
