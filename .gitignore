@@ -1,0 +1,9 @@
+node_modules
+dist
+*.tsbuildinfo
+
+# Oracle run outputs (diff images, golden snapshots written at runtime)
+.oracles-out/
+.oracles-out-*/
+out/
+tmp/

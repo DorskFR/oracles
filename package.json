@@ -1,0 +1,73 @@
+{
+  "name": "@dorsk/oracles",
+  "version": "0.1.0",
+  "description": "Framework-agnostic UI-fidelity oracles: visual, style, reuse, geometry, token, a11y. Each an isolated importable unit + CLI.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Dorsk <dorsk.dev@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DorskFR/oracles.git"
+  },
+  "homepage": "https://github.com/DorskFR/oracles#readme",
+  "bugs": {
+    "url": "https://github.com/DorskFR/oracles/issues"
+  },
+  "keywords": [
+    "ui",
+    "fidelity",
+    "visual-regression",
+    "figma",
+    "playwright",
+    "design-system",
+    "oracle",
+    "testing"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "bin": {
+    "oracles": "./dist/cli/index.js"
+  },
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./types": { "types": "./dist/types.d.ts", "default": "./dist/types.js" },
+    "./core": { "types": "./dist/core/index.d.ts", "default": "./dist/core/index.js" },
+    "./visual": { "types": "./dist/oracles/visual.d.ts", "default": "./dist/oracles/visual.js" },
+    "./style": { "types": "./dist/oracles/style.d.ts", "default": "./dist/oracles/style.js" },
+    "./reuse": { "types": "./dist/oracles/reuse.d.ts", "default": "./dist/oracles/reuse.js" },
+    "./geometry": { "types": "./dist/oracles/geometry.d.ts", "default": "./dist/oracles/geometry.js" },
+    "./token": { "types": "./dist/oracles/token.d.ts", "default": "./dist/oracles/token.js" },
+    "./a11y": { "types": "./dist/oracles/a11y.d.ts", "default": "./dist/oracles/a11y.js" },
+    "./references": { "types": "./dist/references/index.d.ts", "default": "./dist/references/index.js" },
+    "./runner": { "types": "./dist/runner.d.ts", "default": "./dist/runner.js" },
+    "./lint/no-raw-intrinsics": { "types": "./dist/lint/no-raw-intrinsics.d.ts", "default": "./dist/lint/no-raw-intrinsics.js" }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "tsc -p tsconfig.build.json && (lefthook install || true)",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "dev": "tsx src/cli/index.ts"
+  },
+  "dependencies": {
+    "pixelmatch": "^6.0.0",
+    "playwright": "^1.61.0",
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@types/node": "^24.0.0",
+    "@types/pngjs": "^6.0.5",
+    "lefthook": "^1.7.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
