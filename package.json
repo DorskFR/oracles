@@ -1,6 +1,6 @@
 {
   "name": "@dorsk/oracles",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-agnostic UI-fidelity oracles: visual, style, reuse, geometry, token, a11y. Each an isolated importable unit + CLI.",
   "type": "module",
   "license": "MIT",
@@ -78,6 +78,10 @@
     "./lint/no-raw-intrinsics": {
       "types": "./dist/lint/no-raw-intrinsics.d.ts",
       "default": "./dist/lint/no-raw-intrinsics.js"
+    },
+    "./lint/no-global": {
+      "types": "./dist/lint/no-global.d.ts",
+      "default": "./dist/lint/no-global.js"
     }
   },
   "files": [
