@@ -1,6 +1,6 @@
 {
   "name": "@dorsk/oracles",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Framework-agnostic UI-fidelity oracles: visual, style, reuse, geometry, token, a11y. Each an isolated importable unit + CLI.",
   "type": "module",
   "license": "MIT",
