@@ -44,6 +44,9 @@ export interface NoGlobalConfig {
 // (hypothetical) doesn't match.
 const GLOBAL_RE = /:global\b/g;
 
+// A documented opt-out marker, e.g. `/* allow-global: styling DataTable rows */`.
+const ALLOW_RE = /allow-global\b/i;
+
 // Strip /* ... */ CSS comments (replaced with same-length blanks to preserve
 // offsets) so commented-out `:global` isn't flagged when ignoreComments is on.
 function blankComments(text: string): string {
@@ -66,7 +69,7 @@ export const noGlobal = {
     ],
     messages: {
       noGlobal:
-        "Avoid :global() — reach for the component's props/variants (or a real wrapping element). If unavoidable (e.g. styling rows a library renders), add `// eslint-disable-next-line @dorsk/oracles/no-global -- <reason>`.",
+        "Avoid :global() — reach for the component's props/variants (or a real wrapping element). If genuinely unavoidable (e.g. styling rows a library renders), add a `/* allow-global: <reason> */` comment on the same line or the line above. (ESLint disable-comments do NOT work inside Svelte <style>.)",
     },
   },
   create(context: RuleContextLike) {
@@ -78,18 +81,32 @@ export const noGlobal = {
     const scan = (node: StyleNodeLike) => {
       const start = node.range?.[0] ?? 0;
       const raw = sourceCode.getText(node);
+      // A `/* allow-global: reason */` marker exempts a :global on the SAME line
+      // or the NEXT line (eslint-disable doesn't reach into Svelte <style>, so
+      // this is the documented, greppable opt-out). Detect from the raw text
+      // (before comments are blanked).
+      const exemptLines = new Set<number>();
+      raw.split("\n").forEach((line, i) => {
+        if (ALLOW_RE.test(line)) {
+          exemptLines.add(i);
+          exemptLines.add(i + 1);
+        }
+      });
       const text = ignoreComments ? blankComments(raw) : raw;
       GLOBAL_RE.lastIndex = 0;
       let m: RegExpExecArray | null = GLOBAL_RE.exec(text);
       while (m !== null) {
-        const idx = start + m.index;
-        context.report({
-          loc: {
-            start: sourceCode.getLocFromIndex(idx),
-            end: sourceCode.getLocFromIndex(idx + m[0].length),
-          },
-          messageId: "noGlobal",
-        });
+        const lineIdx = text.slice(0, m.index).split("\n").length - 1;
+        if (!exemptLines.has(lineIdx)) {
+          const idx = start + m.index;
+          context.report({
+            loc: {
+              start: sourceCode.getLocFromIndex(idx),
+              end: sourceCode.getLocFromIndex(idx + m[0].length),
+            },
+            messageId: "noGlobal",
+          });
+        }
         m = GLOBAL_RE.exec(text);
       }
     };

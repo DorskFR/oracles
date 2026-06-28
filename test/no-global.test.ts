@@ -41,3 +41,16 @@ test("ignores :global inside a CSS comment by default", () => {
 test("flags commented :global when ignoreComments is false", () => {
   assert.equal(run("/* :global(.z) */ .a {}", [{ ignoreComments: false }]).length, 1);
 });
+
+test("allow-global marker on the line above exempts the :global", () => {
+  assert.equal(run("/* allow-global: DataTable rows */\n:global(tr) { color: red }").length, 0);
+});
+
+test("allow-global marker on the same line exempts the :global", () => {
+  assert.equal(run(":global(tr) { color: red } /* allow-global: reason */").length, 0);
+});
+
+test("allow-global exempts only its own + next line, not later ones", () => {
+  const r = run("/* allow-global: x */\n:global(.ok) {}\n:global(.bad) {}");
+  assert.equal(r.length, 1);
+});
