@@ -47,10 +47,13 @@ const GLOBAL_RE = /:global\b/g;
 // A documented opt-out marker, e.g. `/* allow-global: styling DataTable rows */`.
 const ALLOW_RE = /allow-global\b/i;
 
-// Strip /* ... */ CSS comments (replaced with same-length blanks to preserve
-// offsets) so commented-out `:global` isn't flagged when ignoreComments is on.
+// Blank out /* ... */ CSS comments so a commented-out `:global` isn't flagged
+// (when ignoreComments is on). Preserve BOTH length (offsets stay valid for
+// getLocFromIndex) AND newlines (line numbers stay aligned with the raw text,
+// which the allow-global exemption check relies on) — so only non-newline chars
+// become spaces.
 function blankComments(text: string): string {
-  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => " ".repeat(m.length));
+  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
 }
 
 export const noGlobal = {

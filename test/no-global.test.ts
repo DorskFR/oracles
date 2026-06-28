@@ -54,3 +54,9 @@ test("allow-global exempts only its own + next line, not later ones", () => {
   const r = run("/* allow-global: x */\n:global(.ok) {}\n:global(.bad) {}");
   assert.equal(r.length, 1);
 });
+
+test("allow-global still exempts when multi-line comments precede the :global", () => {
+  // A multi-line comment above must not shift the exemption's line math.
+  const style = "/* a\n   multi\n   line */\n.x {}\n/* allow-global: ok */\n:global(.y) {}";
+  assert.equal(run(style).length, 0);
+});
